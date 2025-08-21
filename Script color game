@@ -1,0 +1,122 @@
+-- ⚡ Hack GUI Grid 2 Cột + Loop Toggle
+local gui = Instance.new("ScreenGui")
+gui.Name = "HackGui"
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Khung chính
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0,360,0,320)
+mainFrame.Position = UDim2.new(0.5,-180,0.5,-160)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40,40,40)
+mainFrame.Visible = false
+mainFrame.Parent = gui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0,12)
+corner.Parent = mainFrame
+
+-- Nút mở/đóng
+local toggleBtn = Instance.new("TextButton")
+toggleBtn.Size = UDim2.new(0,120,0,40)
+toggleBtn.Position = UDim2.new(0.5,-60,0,-50)
+toggleBtn.Text = "Open Menu"
+toggleBtn.Font = Enum.Font.GothamSemibold
+toggleBtn.TextSize = 16
+toggleBtn.BackgroundColor3 = Color3.fromRGB(0,170,255)
+toggleBtn.TextColor3 = Color3.fromRGB(255,255,255)
+toggleBtn.Parent = gui
+
+toggleBtn.MouseButton1Click:Connect(function()
+    mainFrame.Visible = not mainFrame.Visible
+    toggleBtn.Text = mainFrame.Visible and "Close Menu" or "Open Menu"
+end)
+
+-- Grid layout (2 cột)
+local grid = Instance.new("UIGridLayout")
+grid.Parent = mainFrame
+grid.CellSize = UDim2.new(0,160,0,40) 
+grid.CellPadding = UDim2.new(0,10,0,10) 
+grid.SortOrder = Enum.SortOrder.LayoutOrder
+grid.FillDirectionMaxCells = 2 
+
+--------------------------------------------------------------------
+-- Hàm tạo nút thường
+local function createButton(text,color,callback)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0,160,0,40)
+    btn.Text = text
+    btn.Font = Enum.Font.GothamSemibold
+    btn.TextSize = 16
+    btn.BackgroundColor3 = color
+    btn.TextColor3 = Color3.fromRGB(40,40,40)
+    btn.Parent = mainFrame
+    btn.MouseButton1Click:Connect(function()
+        callback(btn)
+    end)
+    return btn
+end
+
+-- Hàm tạo nút loop toggle
+local function createLoopButton(text,color,loopFunc)
+    local looping = false
+    local btn = createButton(text,color,function(b)
+        looping = not looping
+        if looping then
+            b.Text = text .. " (ON)"
+            task.spawn(function()
+                while looping do
+                    pcall(loopFunc)
+                    task.wait(0.2) -- chỉnh delay
+                end
+            end)
+        else
+            b.Text = text .. " (OFF)"
+        end
+    end)
+end
+
+--------------------------------------------------------------------
+-- Các nút Loop
+createLoopButton("Inf Coins",Color3.fromRGB(255,215,0),function()
+    local args = {"Cash",9999999999999}
+    game:GetService("ReplicatedStorage").Remotes.AddRewardEvent:FireServer(unpack(args))
+end)
+
+createLoopButton("Mod Nuke",Color3.fromRGB(255,100,100),function()
+    local args = {7}
+    game:GetService("ReplicatedStorage").Remotes.SpinWheelPrizeEvent:FireServer(unpack(args))
+end)
+
+createLoopButton("G Bombs",Color3.fromRGB(255,255,100),function()
+    local args = {"Gold Bombs",100000000}
+    game:GetService("ReplicatedStorage").Remotes.AddRewardEvent:FireServer(unpack(args))
+end)
+
+createLoopButton("Revives Inf",Color3.fromRGB(200,255,200),function()
+    local args = {"Revives",99999999999}
+    game:GetService("ReplicatedStorage").Remotes.AddRewardEvent:FireServer(unpack(args))
+end)
+
+--------------------------------------------------------------------
+-- Các nút 1 lần
+createButton("Copy Channel",Color3.fromRGB(150,150,255),function()
+    if setclipboard then setclipboard("https://youtube.com/@romd3976?si=RRQL7tbrb4VJPdVM") end
+end)
+
+createButton("Trails RB",Color3.fromRGB(255,100,255),function()
+    local args = {"Rainbow",49}
+    game:GetService("ReplicatedStorage").Remotes.BuyTrailEvent:FireServer(unpack(args))
+end)
+
+createButton("Trails Banana",Color3.fromRGB(255,255,150),function()
+    local args = {"Banana",49}
+    game:GetService("ReplicatedStorage").Remotes.BuyTrailEvent:FireServer(unpack(args))
+end)
+
+createButton("Trail Electric",Color3.fromRGB(150,255,255),function()
+    local args = {"Electric",49}
+    game:GetService("ReplicatedStorage").Remotes.BuyTrailEvent:FireServer(unpack(args))
+end)
+
+--------------------------------------------------------------------
+print("✅ Hack GUI + Loop Toggle đã load")
