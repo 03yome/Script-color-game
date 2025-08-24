@@ -1,4 +1,4 @@
--- ⚡ Hack GUI Grid 2 Cột + Loop Toggle
+--Hack GUI Grid 2 Cột + Loop Toggle
 local gui = Instance.new("ScreenGui")
 gui.Name = "HackGui"
 gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -119,7 +119,7 @@ createButton("Trail Electric",Color3.fromRGB(150,255,255),function()
 end)
 
 --------------------------------------------------------------------
-print("✅ Hack GUI + Loop Toggle đã load")
+print("Hack GUI + Loop Toggle đã load")
 end
 local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' 
 function decode(data)
